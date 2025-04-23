@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Love Fortune Deep</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #fffafa, #ffffff);
+      font-family: 'Noto Sans JP', 'Arial', 'Helvetica', sans-serif;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      color: #ff66a3;
+      font-size: 26px;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+      margin-top: 20px;
+      max-width: 90vw;
+    }
+    label {
+      font-size: 16px;
+      color: #555;
+    }
+    input[type="date"], select {
+      margin-top: 5px;
+      margin-bottom: 15px;
+      padding: 8px;
+      width: 90%;
+      max-width: 200px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #ff66a3;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 24px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #ff85b3;
+    }
+    #result {
+      margin-top: 30px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+      font-size: 20px;
+      color: #ff3399;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      width: fit-content;
+      opacity: 0;
+      transform: scale(0.9) translateX(-20px);
+      transition: all 1s ease;
+      max-width: 90vw;
+    }
+    #result.show {
+      opacity: 1;
+      transform: scale(1) translateX(0);
+    }
+    .fortune-detail p {
+      margin: 10px 0;
+      font-size: 14px;
+      text-align: center;
+    }
+    .highlight {
+      border-left: 5px solid #ff66a3;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+    .highlight strong {
+      display: block;
+      margin-top: 5px;
+    }
+    .share-buttons {
+      margin-top: 20px;
+    }
+    .share-buttons a {
+      margin: 5px;
+      padding: 8px 12px;
+      font-size: 14px;
+      background-color: #ff66a3;
+      color: white;
+      border-radius: 20px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .share-buttons a:hover {
+      background-color: #ff85b3;
+    }
+    @media screen and (max-width: 480px) {
+      h1 {
+        font-size: 22px;
+      }
+      .fortune-detail p, .highlight {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>💕 恋愛運占い（ディープ版） 💕</h1>
+  <form id="fortuneForm">
+    <label for="ageRange">年齢帯を選んでください:</label><br>
+    <select id="ageRange">
+      <option value="10">10代</option>
+      <option value="20" selected>20代</option>
+      <option value="30">30代</option>
+      <option value="40">40代</option>
+    </select><br>
+    <label for="yourBirthday">あなたの誕生日:</label><br>
+    <input type="date" id="yourBirthday" name="yourBirthday" required><br><br>
+    <button type="submit">占う</button>
+  </form>
+
+  <div id="result">
+    <div id="shortResult"></div>
+    <div class="fortune-detail" id="fortuneDetail"></div>
+    <div class="share-buttons" id="shareButtons" style="display:none;">
+      <a id="shareLine" href="#" target="_blank">LINEでシェア</a>
+      <a id="shareTwitter" href="#" target="_blank">Xでシェア</a>
+      <a id="shareInstagram" href="#" target="_blank">Instagramでシェア</a>
+    </div>
+    <button id="againButton" style="display:none; margin-top:20px;">もう一度占う</button>
+  </div>
+
+  <script>
+    const form = document.getElementById('fortuneForm');
+    const resultBox = document.getElementById('result');
+    const shortResult = document.getElementById('shortResult');
+    const detailBox = document.getElementById('fortuneDetail');
+    const shareButtons = document.getElementById('shareButtons');
+    const againButton = document.getElementById('againButton');
+    const birthdayInput = document.getElementById('yourBirthday');
+    const ageSelect = document.getElementById('ageRange');
+    const shareLine = document.getElementById('shareLine');
+    const shareTwitter = document.getElementById('shareTwitter');
+    const shareInstagram = document.getElementById('shareInstagram');
+
+    const setBirthday = () => {
+      const today = new Date();
+      const baseAge = parseInt(ageSelect.value);
+      const birthday = new Date(today.getFullYear() - baseAge, today.getMonth(), today.getDate());
+      birthdayInput.valueAsDate = birthday;
+    };
+    ageSelect.addEventListener('change', setBirthday);
+    setBirthday();
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const fortunes = [
+        { short: "🦋 新しい出会いがすぐそこに！", keyword: "夢実現", color: "アクアブルー", action: "未来日記を書く", detail: "あなたの中で眠っていた恋の可能性が目を覚まそうとしています。今日の出会いや行動が、未来の特別な縁につながるかもしれません。自分を信じて、一歩を踏み出して。" },
+        { short: "🌸 心を開くことで恋愛運上昇！", keyword: "共感", color: "ピンク", action: "笑顔を意識する", detail: "本音で向き合うことが、心の距離をぐっと縮めます。思いやりある言葉や、優しい笑顔が恋を引き寄せるきっかけに。" },
+        { short: "🌈 過去の恋に区切りを。", keyword: "再出発", color: "ライトグレー", action: "部屋の掃除", detail: "少しずつ過去を手放して、新しい自分へと変わるタイミング。心の整理が、次の恋を呼び込む鍵になります。" },
+        { short: "🌟 穏やかな日常にこそ恋の種が。", keyword: "日常の中の幸せ", color: "ローズピンク", action: "日記をつける", detail: "特別な出来事だけが恋のきっかけとは限りません。いつもの風景に気づくことで、心にゆとりが生まれます。" }
+      ];
+
+      const index = Math.floor(Math.random() * fortunes.length);
+      const fortune = fortunes[index];
+
+      shortResult.textContent = fortune.short;
+      detailBox.innerHTML = `
+        <p style="font-size:14px; margin-top:10px;">${fortune.detail}</p>
+        <div class="highlight">
+          <p>今日のキーワード：<strong>${fortune.keyword}</strong></p>
+          <p>ラッキーカラー：<strong>${fortune.color}</strong></p>
+          <p>開運アクション：<strong>${fortune.action}</strong></p>
+        </div>
+      `;
+
+      const shareText = `${fortune.short}\n${fortune.detail}\n#恋愛運 #今日の占い`;
+      const url = encodeURIComponent(window.location.href);
+      shareLine.href = `https://social-plugins.line.me/lineit/share?url=${url}&text=${encodeURIComponent(shareText)}`;
+      shareTwitter.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${url}`;
+      shareInstagram.href = '#';
+
+      resultBox.classList.remove('show');
+      void resultBox.offsetWidth;
+      resultBox.classList.add('show');
+      shareButtons.style.display = 'block';
+      againButton.style.display = 'inline-block';
+    });
+
+    againButton.addEventListener('click', () => {
+      resultBox.classList.remove('show');
+      detailBox.innerHTML = '';
+      shortResult.textContent = '';
+      shareButtons.style.display = 'none';
+      againButton.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
