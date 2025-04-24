@@ -1,2 +1,45 @@
-<title>Love Fortune</title>
-<h1>💫　占いindex　💫</h1>
+<!-- index.html: 占いメニュー画面 -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fortune App Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #fffafa, #ffffff);
+      font-family: 'Noto Sans JP', 'Arial', 'Helvetica', sans-serif;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      color: #ff66a3;
+      font-size: 26px;
+    }
+    .menu-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 14px 28px;
+      background-color: #ff66a3;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .menu-button:hover {
+      background-color: #ff85b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔮 運勢占いメニュー 🔮</h1>
+  <button class="menu-button" onclick="location.href='love-fortune-deep.html'">💗 恋愛運</button>
+  <button class="menu-button" onclick="location.href='money.html'">💰 金運</button>
+  <button class="menu-button" onclick="location.href='career.html'">💼 仕事運</button>
+  <button class="menu-button" onclick="location.href='love.html'">💞 相性占い</button>
+</body>
+</html>
