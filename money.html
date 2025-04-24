@@ -1,2 +1,206 @@
-<title>Love Fortune</title>
-<h1>💎　金運占い 💎</h1>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>金運占い</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #fff8e1, #ffffff);
+      font-family: 'Noto Sans JP', sans-serif;
+      text-align: center;
+      padding: 20px;
+      overflow-x: hidden;
+      color: #444;
+    }
+    h1 {
+      color: #ff9900;
+      margin-bottom: 20px;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+      margin: 0 auto;
+    }
+    label, select {
+      font-size: 14px;
+      color: #555;
+    }
+    input[type="date"], select {
+      margin: 5px 0 15px;
+      padding: 6px 8px;
+      width: 180px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #ffaa00;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #ffcc33;
+    }
+    #result {
+      margin-top: 30px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+      font-size: 18px;
+      color: #996600;
+      background: linear-gradient(to bottom right, #fffbe6, #fff1cc);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      width: fit-content;
+      opacity: 0;
+      transition: opacity 1s ease, transform 0.5s ease;
+      transform: translateY(20px);
+    }
+    #result.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .keyword {
+      font-weight: bold;
+      font-size: 20px;
+      color: #cc6600;
+    }
+    .shiny {
+      animation: sparkle 1s infinite alternate;
+    }
+    @keyframes sparkle {
+      0% { text-shadow: 0 0 5px gold; }
+      100% { text-shadow: 0 0 10px orange; }
+    }
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: gold;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: fall 5s linear infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-10px); }
+      100% { transform: translateY(100vh); opacity: 0; }
+    }
+    .social-buttons {
+      margin-top: 20px;
+    }
+    .social-buttons a {
+      margin: 0 10px;
+      font-size: 14px;
+      text-decoration: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+    .line { background-color: #00c300; }
+    .x { background-color: #1da1f2; }
+    .insta { background-color: #c13584; }
+    .back-button {
+      margin-top: 20px;
+      display: block;
+      text-decoration: none;
+      background-color: #ffaa00;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 24px;
+    }
+  </style>
+</head>
+<body>
+  <h1>💰 金運占い 💰</h1>
+  <form id="fortuneForm">
+    <label for="ageRange">年齢帯を選んでください:</label><br />
+    <select id="ageRange">
+      <option value="10">10代</option>
+      <option value="20" selected>20代</option>
+      <option value="30">30代</option>
+      <option value="40">40代</option>
+      <option value="50">50代</option>
+      <option value="60">60代以上</option>
+    </select><br />
+    <label for="yourBirthday">あなたの誕生日:</label><br />
+    <input type="date" id="yourBirthday" name="yourBirthday" required /><br /><br />
+    <button type="submit">占う</button>
+  </form>
+  <div id="result"></div>
+  <a href="index.html" class="back-button">🔙 トップに戻る</a>
+
+  <script>
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.left = Math.random() * 100 + 'vw';
+      sparkle.style.animationDuration = 2 + Math.random() * 3 + 's';
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 5000);
+    }
+    setInterval(createSparkle, 300);
+
+    function setBirthdayByAgeRange() {
+      const age = parseInt(document.getElementById('ageRange').value);
+      const birthdayInput = document.getElementById("yourBirthday");
+      const today = new Date();
+      const defaultDate = new Date(today.getFullYear() - (age === 60 ? 65 : age), today.getMonth(), today.getDate());
+      const yyyy = defaultDate.getFullYear();
+      const mm = String(defaultDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(defaultDate.getDate()).padStart(2, '0');
+      birthdayInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setBirthdayByAgeRange();
+      document.getElementById('ageRange').addEventListener('change', setBirthdayByAgeRange);
+
+      const form = document.getElementById("fortuneForm");
+      const resultDiv = document.getElementById("result");
+      let fortunes = [];
+
+      fetch("money.json?v=" + new Date().getTime())
+        .then(response => response.json())
+        .then(data => {
+          fortunes = data;
+        });
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (fortunes.length === 0) {
+          resultDiv.textContent = "占いデータの読み込み中です…";
+          return;
+        }
+
+        const result = fortunes[Math.floor(Math.random() * fortunes.length)];
+        resultDiv.innerHTML = `
+          <div class="keyword shiny">🔑 今日のキーワード：${result.keyword}</div>
+          <p>🎨 ラッキーカラー：<strong>${result.color}</strong></p>
+          <p>📌 開運アクション：<em>${result.action}</em></p>
+          <p style="margin-top: 15px; line-height: 1.6;">${result.message}</p>
+          <div class="social-buttons">
+            <a class="line" href="https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(location.href)}" target="_blank">LINE</a>
+            <a class="x" href="https://twitter.com/intent/tweet?url=${encodeURIComponent(location.href)}" target="_blank">X</a>
+            <a class="insta" href="https://www.instagram.com/" target="_blank">Instagram</a>
+          </div>
+        `;
+        resultDiv.classList.remove("show");
+        void resultDiv.offsetWidth;
+        resultDiv.classList.add("show");
+      });
+    });
+  </script>
+</body>
+</html>
+
