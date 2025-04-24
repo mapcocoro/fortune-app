@@ -12,6 +12,8 @@
       text-align: center;
       padding: 20px;
       margin: 0;
+      overflow-x: hidden;
+      position: relative;
     }
     h1 {
       color: #ff66a3;
@@ -56,7 +58,7 @@
       margin-top: 30px;
       margin-left: auto;
       margin-right: auto;
-      padding: 20px;
+      padding: 20px 20px 100px;
       font-size: 20px;
       color: #ff3399;
       border-radius: 16px;
@@ -66,6 +68,7 @@
       transform: scale(0.9) translateX(-20px);
       transition: all 1s ease;
       max-width: 90vw;
+      background-color: #fff0f5;
     }
     #result.show {
       opacity: 1;
@@ -77,7 +80,6 @@
       text-align: center;
     }
     .highlight {
-      border-left: 5px solid #ff66a3;
       padding: 10px;
       margin-top: 10px;
       font-size: 14px;
@@ -94,14 +96,39 @@
       margin: 5px;
       padding: 8px 12px;
       font-size: 14px;
-      background-color: #ff66a3;
       color: white;
       border-radius: 20px;
       text-decoration: none;
       display: inline-block;
     }
+    #shareLine { background-color: #d8f4e0; color: #008000; }
+    #shareTwitter { background-color: #ddeeff; color: #1da1f2; }
+    #shareInstagram { background-color: #ffe0eb; color: #e1306c; }
     .share-buttons a:hover {
-      background-color: #ff85b3;
+      opacity: 0.85;
+    }
+    .heart {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background-color: pink;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: fallHeart 6s linear infinite;
+    }
+    @keyframes fallHeart {
+      0% { transform: translateY(-20px); }
+      100% { transform: translateY(100vh); opacity: 0; }
+    }
+    .top-link {
+      margin-top: 20px;
+      display: block;
+      color: #ff66a3;
+      font-size: 14px;
+      text-decoration: none;
+    }
+    .top-link:hover {
+      text-decoration: underline;
     }
     @media screen and (max-width: 480px) {
       h1 {
@@ -114,7 +141,8 @@
   </style>
 </head>
 <body>
-  <h1>💕 恋愛運占い（ディープ版） 💕</h1>
+  <a href="index.html" class="top-link">🏠 トップに戻る</a>
+  <h1>💕 恋愛運占い 💕</h1>
   <form id="fortuneForm">
     <label for="ageRange">年齢帯を選んでください:</label><br>
     <select id="ageRange">
@@ -127,19 +155,28 @@
     <input type="date" id="yourBirthday" name="yourBirthday" required><br><br>
     <button type="submit">占う</button>
   </form>
-
   <div id="result">
     <div id="shortResult"></div>
     <div class="fortune-detail" id="fortuneDetail"></div>
     <div class="share-buttons" id="shareButtons" style="display:none;">
       <a id="shareLine" href="#" target="_blank">LINEでシェア</a>
       <a id="shareTwitter" href="#" target="_blank">Xでシェア</a>
-      <a id="shareInstagram" href="#" target="_blank">Instagramでシェア</a>
+      <a id="shareInstagram" href="https://www.instagram.com/" target="_blank">Instagramでシェア</a>
     </div>
     <button id="againButton" style="display:none; margin-top:20px;">もう一度占う</button>
   </div>
 
   <script>
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = 2 + Math.random() * 3 + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 300);
+
     const form = document.getElementById('fortuneForm');
     const resultBox = document.getElementById('result');
     const shortResult = document.getElementById('shortResult');
@@ -161,14 +198,21 @@
     ageSelect.addEventListener('change', setBirthday);
     setBirthday();
 
+    let fortunes = [];
+
+    // fortunes.json を GitHub Pages から読み込む（絶対パスに変更）
+    fetch('https://mapcocoro.github.io/fortune-app/fortunes.json')
+      .then(response => response.json())
+      .then(data => {
+        fortunes = data;
+      });
+
     form.addEventListener('submit', function(event) {
       event.preventDefault();
-      const fortunes = [
-        { short: "🦋 新しい出会いがすぐそこに！", keyword: "夢実現", color: "アクアブルー", action: "未来日記を書く", detail: "あなたの中で眠っていた恋の可能性が目を覚まそうとしています。今日の出会いや行動が、未来の特別な縁につながるかもしれません。自分を信じて、一歩を踏み出して。" },
-        { short: "🌸 心を開くことで恋愛運上昇！", keyword: "共感", color: "ピンク", action: "笑顔を意識する", detail: "本音で向き合うことが、心の距離をぐっと縮めます。思いやりある言葉や、優しい笑顔が恋を引き寄せるきっかけに。" },
-        { short: "🌈 過去の恋に区切りを。", keyword: "再出発", color: "ライトグレー", action: "部屋の掃除", detail: "少しずつ過去を手放して、新しい自分へと変わるタイミング。心の整理が、次の恋を呼び込む鍵になります。" },
-        { short: "🌟 穏やかな日常にこそ恋の種が。", keyword: "日常の中の幸せ", color: "ローズピンク", action: "日記をつける", detail: "特別な出来事だけが恋のきっかけとは限りません。いつもの風景に気づくことで、心にゆとりが生まれます。" }
-      ];
+      if (fortunes.length === 0) {
+        shortResult.textContent = "占いデータの読み込み中です…";
+        return;
+      }
 
       const index = Math.floor(Math.random() * fortunes.length);
       const fortune = fortunes[index];
@@ -187,7 +231,7 @@
       const url = encodeURIComponent(window.location.href);
       shareLine.href = `https://social-plugins.line.me/lineit/share?url=${url}&text=${encodeURIComponent(shareText)}`;
       shareTwitter.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${url}`;
-      shareInstagram.href = '#';
+      shareInstagram.href = `https://www.instagram.com/`;
 
       resultBox.classList.remove('show');
       void resultBox.offsetWidth;
@@ -206,6 +250,9 @@
   </script>
 </body>
 </html>
+
+
+
 
 
 
