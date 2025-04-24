@@ -1,2 +1,169 @@
-<title>Love Fortune</title>
-<h1>💻 お仕事占い 💻</h1>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>キャリア運占い</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Noto Sans JP", sans-serif;
+      background: #e6f1f9;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 28px;
+      color: #2b6ca3;
+    }
+    form {
+      background: white;
+      max-width: 320px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    label {
+      width: 100%;
+      text-align: left;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    select, input[type="date"] {
+      width: 85%;
+      padding: 6px 8px;
+      margin: 6px 0 12px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      display: block;
+      margin: 10px auto 0;
+      background-color: #3a84c6;
+      color: white;
+      font-size: 16px;
+      padding: 8px 24px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+    }
+    .card {
+      background: #fff;
+      margin: 30px auto 120px;
+      padding: 25px;
+      max-width: 420px;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+    }
+    .card p {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+    .share {
+      margin-top: 20px;
+    }
+    .share a {
+      margin: 0 12px;
+      text-decoration: none;
+      color: #3a84c6;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .back-button {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .back-button a {
+      text-decoration: none;
+      color: #3a84c6;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌟 キャリア運占い 🌟</h1>
+  <form id="fortuneForm">
+    <label for="ageGroup">年齢帯を選択:</label>
+    <select id="ageGroup">
+      <option value="20">20代</option>
+      <option value="30">30代</option>
+      <option value="40">40代</option>
+      <option value="50">50代</option>
+      <option value="60">60代以上</option>
+    </select>
+    <label for="birthday">誕生日を入力:</label>
+    <input type="date" id="birthday" required />
+    <button type="submit">占う</button>
+  </form>
+  <div id="result" class="card" style="display:none;"></div>
+  <div class="back-button">
+    <a href="index.html">← トップに戻る</a>
+  </div>
+
+  <script>
+    const ageGroupSelect = document.getElementById('ageGroup');
+    const birthdayInput = document.getElementById('birthday');
+    const resultDiv = document.getElementById('result');
+    const form = document.getElementById('fortuneForm');
+    let careerFortunes = [];
+
+    // 誕生日の自動セット
+    let isBirthdayManuallyChanged = false;
+    birthdayInput.addEventListener('change', () => {
+      isBirthdayManuallyChanged = true;
+    });
+
+    ageGroupSelect.addEventListener('change', () => {
+      if (isBirthdayManuallyChanged) return;
+      const baseYear = new Date().getFullYear();
+      const age = parseInt(ageGroupSelect.value);
+      const estimatedYear = baseYear - (age === 60 ? 65 : age);
+      const month = (new Date().getMonth() + 1).toString().padStart(2, '0');
+      const day = new Date().getDate().toString().padStart(2, '0');
+      birthdayInput.value = `${estimatedYear}-${month}-${day}`;
+    });
+
+    // JSON読み込み
+    fetch('career.json')
+      .then(res => res.json())
+      .then(data => {
+        careerFortunes = data;
+      });
+
+    // 占い表示
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (careerFortunes.length === 0) {
+        resultDiv.innerHTML = "<p>占いデータの読み込み中です…</p>";
+        resultDiv.style.display = 'block';
+        return;
+      }
+
+      const f = careerFortunes[Math.floor(Math.random() * careerFortunes.length)];
+      resultDiv.innerHTML = `
+        <p>${f.icon} ${f.message}</p>
+        <p>今日のキーワード：<strong>${f.keyword}</strong></p>
+        <p>ラッキーカラー：<strong>${f.color}</strong></p>
+        <p>開運アクション：<strong>${f.action}</strong></p>
+        <p>おすすめの本：<strong>${f.book}</strong></p>
+        <div class="share">
+          <p>この結果をシェアしよう！</p>
+          <a href="https://line.me/R/msg/text/?キャリア運占いの結果：${encodeURIComponent(f.message)}" target="_blank">LINE</a>
+          <a href="https://twitter.com/intent/tweet?text=キャリア運占いの結果：${encodeURIComponent(f.message)}" target="_blank">X</a>
+          <a href="https://www.instagram.com/" target="_blank">Instagram</a>
+        </div>
+      `;
+      resultDiv.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
