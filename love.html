@@ -176,25 +176,32 @@
     }
     setInterval(createHeart, 300);
 
-    document.getElementById("fortuneForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const messages = [
-        { msg: "思い出の場所に幸運あり。過去が今に繋がります。🗻", action: "昔よく行った場所に行ってみよう" },
-        { msg: "今日は心を開いてみて。😊", action: "本音を伝える" },
-        { msg: "旧友の再会が重要なきっかけになりそう。💌", action: "連絡をとり直す" }
-      ];
+    document.getElementById("fortuneForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const relationship = document.getElementById("relationship").value || "mutual"; // デフォルト
+
+    try {
+      const response = await fetch("love.json");
+      const data = await response.json();
+      const messages = data[relationship] || data["mutual"]; // 万一キーが無ければ mutual
+
       const random = messages[Math.floor(Math.random() * messages.length)];
+
       const resultDiv = document.getElementById("result");
       const shortResult = document.getElementById("shortResult");
-      shortResult.textContent = `${random.msg}\nラッキーアクション：${random.action}`;
+      shortResult.textContent = `${random.message}\nラッキーアクション：${random.action}`;
       resultDiv.style.display = "block";
 
       const url = encodeURIComponent(location.href);
-      const text = encodeURIComponent(`${random.msg} ラッキーアクション：${random.action}`);
+      const text = encodeURIComponent(`${random.message} ラッキーアクション：${random.action}`);
       document.getElementById("shareLine").href = `https://social-plugins.line.me/lineit/share?url=${url}&text=${text}`;
       document.getElementById("shareTwitter").href = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
-    });
-
+    } catch (error) {
+      alert("占い結果の読み込みに失敗しました。");
+      console.error(error);
+    }
+  });
     window.onload = function () {
       const today = new Date();
       const offset = 20;
