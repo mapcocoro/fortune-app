@@ -1,46 +1,273 @@
-<!-- index.html: 占いメニュー画面 -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="/fortune-app/">
-  <title>Fortune App Menu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <title>✨ 運勢占いアプリ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background: linear-gradient(to bottom right, #fffafa, #ffffff);
-      font-family: 'Noto Sans JP', 'Arial', 'Helvetica', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      font-family: 'Kosugi Maru', sans-serif;
       text-align: center;
-      padding: 20px;
+      padding: 2rem 1rem;
       margin: 0;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
     }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
     h1 {
-      color: #ff66a3;
-      font-size: 26px;
-    }
-    .menu-button {
-      display: inline-block;
-      margin: 10px;
-      padding: 14px 28px;
-      background-color: #ff66a3;
       color: white;
-      font-size: 16px;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: background-color 0.3s;
+      font-size: clamp(1.4rem, 3.5vw, 1.8rem);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      margin-bottom: 3rem;
+      line-height: 1.4;
+      font-weight: 400;
+      animation: titleGlow 3s ease-in-out infinite alternate;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
+
+    @keyframes titleGlow {
+      0% { text-shadow: 0 2px 10px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.3); }
+      100% { text-shadow: 0 2px 10px rgba(0,0,0,0.3), 0 0 30px rgba(255,255,255,0.5); }
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .menu-button {
+      background: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      font-size: 1.1rem;
+      font-family: inherit;
+      font-weight: 500;
+      color: #4a5568;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        0 10px 30px rgba(0,0,0,0.1),
+        0 4px 12px rgba(0,0,0,0.05),
+        inset 0 1px 0 rgba(255,255,255,1);
+      position: relative;
+      backdrop-filter: blur(10px);
+      transform: translateY(0);
+    }
+
+    .menu-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .menu-button:hover::before {
+      opacity: 1;
+    }
+
     .menu-button:hover {
-      background-color: #ff85b3;
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 
+        0 20px 40px rgba(0,0,0,0.15),
+        0 8px 20px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,1);
+      color: #2d3748;
+    }
+
+    .menu-button:active {
+      transform: translateY(-4px) scale(0.98);
+      transition-duration: 0.1s;
+    }
+
+    .menu-button .icon {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 0.8rem;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .menu-button .title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #2d3748;
+    }
+
+    .menu-button .description {
+      font-size: 0.9rem;
+      color: #718096;
+      line-height: 1.4;
+    }
+
+    .floating-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255,255,255,0.6);
+      border-radius: 50%;
+      animation: float 8s infinite linear;
+    }
+
+    @keyframes float {
+      0% { 
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { 
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .footer {
+      margin-top: 4rem;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1.5rem 1rem;
+      }
+
+      h1 {
+        font-size: clamp(1.2rem, 3vw, 1.5rem);
+        margin-bottom: 2rem;
+        padding: 0 0.5rem;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .menu-button {
+        padding: 1.5rem 1rem;
+        font-size: 1rem;
+      }
+
+      .menu-button .icon {
+        font-size: 2rem;
+        margin-bottom: 0.6rem;
+      }
+
+      .menu-button .title {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: clamp(1rem, 2.8vw, 1.3rem);
+        margin-bottom: 1.5rem;
+        padding: 0 1rem;
+        line-height: 1.5;
+      }
+
+      .container {
+        padding: 0 0.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>🔮 運勢占いメニュー 🔮</h1>
-  <button class="menu-button" onclick="location.href='/love-fortune-deep.html'">💗 恋愛運</button>
-  <button class="menu-button" onclick="location.href='/money.html'">💰 金運</button>
-  <button class="menu-button" onclick="location.href='/career.html'">💼 仕事運</button>
-  <button class="menu-button" onclick="location.href='/love.html'">💞 相性占い</button>
+  <div class="floating-particles"></div>
+  
+  <div class="container">
+    <h1>🔮 ✨ 運勢占いの世界へようこそ ✨ 🔮</h1>
+    
+    <div class="menu-grid">
+      <button class="menu-button" onclick="location.href='love-fortune-deep.html'">
+        <div class="icon">💗</div>
+        <div class="title">恋愛運占い</div>
+        <div class="description">あなたの恋の行方を星が教えてくれます</div>
+      </button>
+      
+      <button class="menu-button" onclick="location.href='money.html'">
+        <div class="icon">💰</div>
+        <div class="title">金運占い</div>
+        <div class="description">豊かさと財運の流れを読み解きます</div>
+      </button>
+      
+      <button class="menu-button" onclick="location.href='career.html'">
+        <div class="icon">💼</div>
+        <div class="title">仕事運占い</div>
+        <div class="description">キャリアの方向性と成功の鍵を探ります</div>
+      </button>
+      
+      <button class="menu-button" onclick="location.href='love.html'">
+        <div class="icon">💞</div>
+        <div class="title">相性占い</div>
+        <div class="description">二人の心の繋がりを占います</div>
+      </button>
+    </div>
+    
+    <div class="footer">
+      今日のあなたにぴったりな運勢をお届けします
+    </div>
+  </div>
+
+  <script>
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      const size = Math.random() * 6 + 2;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+      particle.style.animationDelay = Math.random() * 2 + 's';
+      
+      document.querySelector('.floating-particles').appendChild(particle);
+      
+      setTimeout(() => {
+        particle.remove();
+      }, 8000);
+    }
+
+    setInterval(createParticle, 300);
+    
+    // 初期パーティクル生成
+    for (let i = 0; i < 10; i++) {
+      setTimeout(createParticle, i * 100);
+    }
+  </script>
 </body>
 </html>

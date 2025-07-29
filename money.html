@@ -3,153 +3,396 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>金運占い</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+  <title>💰 金運占い | 運勢占いアプリ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background: linear-gradient(to bottom right, #fff8e1, #ffffff);
-      font-family: 'Noto Sans JP', sans-serif;
+      background: linear-gradient(135deg, #ffd700 0%, #ffb347 50%, #ff6347 100%);
+      font-family: 'Kosugi Maru', sans-serif;
       text-align: center;
-      padding: 20px;
+      padding: 2rem 1rem;
+      margin: 0;
+      min-height: 100vh;
+      position: relative;
       overflow-x: hidden;
-      color: #444;
     }
-    h1 {
-      color: #ff9900;
-      margin-bottom: 20px;
-    }
-    form {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      display: inline-block;
+
+    .container {
+      max-width: 800px;
       margin: 0 auto;
+      position: relative;
+      z-index: 10;
     }
-    label, select {
-      font-size: 14px;
-      color: #555;
+
+    .back-link {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(255,255,255,0.9);
+      padding: 0.8rem 1.2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      color: #666;
+      font-size: 0.9rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
+
+    .back-link:hover {
+      background: rgba(255,255,255,1);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      color: white;
+      font-size: clamp(1.8rem, 4vw, 2.2rem);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      margin-bottom: 2rem;
+      font-weight: 400;
+      animation: shimmer 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes shimmer {
+      0% { text-shadow: 0 2px 10px rgba(0,0,0,0.3), 0 0 20px rgba(255,215,0,0.3); }
+      100% { text-shadow: 0 2px 10px rgba(0,0,0,0.3), 0 0 30px rgba(255,215,0,0.6); }
+    }
+
+    .form-container {
+      background: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      margin: 2rem auto;
+      max-width: 500px;
+      box-shadow: 
+        0 15px 40px rgba(0,0,0,0.1),
+        0 6px 15px rgba(0,0,0,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+      backdrop-filter: blur(15px);
+    }
+
+    label {
+      font-size: 1rem;
+      color: #4a5568;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 0.5rem;
+      text-align: left;
+    }
+
     input[type="date"], select {
-      margin: 5px 0 15px;
-      padding: 6px 8px;
-      width: 180px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border: 2px solid rgba(255,215,0,0.3);
+      border-radius: 15px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: rgba(255,255,255,0.8);
+      transition: all 0.3s ease;
     }
-    button {
-      background-color: #ffaa00;
+
+    input[type="date"]:focus, select:focus {
+      outline: none;
+      border-color: #ffd700;
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 0 0 3px rgba(255,215,0,0.1);
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #ffd700 0%, #ff6347 100%);
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 24px;
-      font-size: 16px;
+      padding: 1.2rem 3rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      font-weight: 500;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 25px rgba(255,215,0,0.4);
+      position: relative;
+      overflow: hidden;
     }
-    button:hover {
-      background-color: #ffcc33;
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
     }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(255,215,0,0.5);
+    }
+
     #result {
-      margin-top: 30px;
+      margin-top: 3rem;
       margin-left: auto;
       margin-right: auto;
-      padding: 20px;
-      font-size: 18px;
-      color: #996600;
-      background: linear-gradient(to bottom right, #fffbe6, #fff1cc);
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      width: fit-content;
+      padding: 2.5rem;
+      max-width: 600px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(255,248,220,0.95) 100%);
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 24px;
+      box-shadow: 
+        0 15px 40px rgba(0,0,0,0.1),
+        0 6px 15px rgba(0,0,0,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.9);
       opacity: 0;
-      transition: opacity 1s ease, transform 0.5s ease;
-      transform: translateY(20px);
+      transform: translateY(30px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(15px);
     }
+
     #result.show {
       opacity: 1;
       transform: translateY(0);
     }
+
     .keyword {
-      font-weight: bold;
-      font-size: 20px;
-      color: #cc6600;
+      font-size: clamp(1.3rem, 3vw, 1.5rem);
+      font-weight: 600;
+      color: #ff6347;
+      margin-bottom: 1rem;
+      animation: goldShimmer 2s ease-in-out infinite alternate;
     }
-    .shiny {
-      animation: sparkle 1s infinite alternate;
+
+    @keyframes goldShimmer {
+      0% { text-shadow: 0 0 10px rgba(255,215,0,0.5); }
+      100% { text-shadow: 0 0 20px rgba(255,215,0,0.8), 0 0 30px rgba(255,99,71,0.3); }
     }
-    @keyframes sparkle {
-      0% { text-shadow: 0 0 5px gold; }
-      100% { text-shadow: 0 0 10px orange; }
+
+    .result-content {
+      font-size: 1.1rem;
+      color: #4a5568;
+      line-height: 1.7;
+      margin: 1.5rem 0;
     }
-    .sparkle {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background-color: gold;
-      border-radius: 50%;
-      opacity: 0.7;
-      animation: fall 5s linear infinite;
+
+    .details {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,248,220,0.2) 100%);
+      border-radius: 16px;
+      border-left: 4px solid #ffd700;
     }
-    @keyframes fall {
-      0% { transform: translateY(-10px); }
-      100% { transform: translateY(100vh); opacity: 0; }
+
+    .details p {
+      margin: 0.8rem 0;
+      font-size: 0.95rem;
+      color: #495057;
     }
+
+    .details strong {
+      color: #ff6347;
+      font-weight: 600;
+    }
+
     .social-buttons {
-      margin-top: 20px;
+      margin-top: 2rem;
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      flex-wrap: wrap;
     }
+
     .social-buttons a {
-      margin: 0 10px;
-      font-size: 14px;
+      padding: 0.8rem 1.2rem;
+      border-radius: 25px;
       text-decoration: none;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 6px;
-      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      white-space: nowrap;
+      min-width: 100px;
+      text-align: center;
     }
-    .line { background-color: #00c300; }
-    .x { background-color: #1da1f2; }
-    .insta { background-color: #c13584; }
-    .back-button {
-      margin-top: 20px;
-      display: block;
-      text-decoration: none;
-      background-color: #ffaa00;
+
+    .line {
+      background: linear-gradient(135deg, #00c300, #00e600);
       color: white;
-      padding: 8px 20px;
-      border-radius: 24px;
+    }
+    
+    .x {
+      background: linear-gradient(135deg, #1da1f2, #0d8bd9);
+      color: white;
+    }
+    
+    .insta {
+      background: linear-gradient(135deg, #e1306c, #fd1d1d, #fcb045);
+      color: white;
+    }
+
+    .social-buttons a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    .floating-coins {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .coin {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: radial-gradient(circle, #ffd700, #ffb347);
+      border-radius: 50%;
+      animation: floatCoin 8s infinite linear;
+      box-shadow: 0 0 10px rgba(255,215,0,0.5);
+    }
+
+    @keyframes floatCoin {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+
+      .back-link {
+        position: relative;
+        top: auto;
+        left: auto;
+        margin-bottom: 1rem;
+        display: inline-block;
+      }
+
+      .form-container {
+        padding: 2rem 1.5rem;
+        margin: 1rem auto;
+      }
+
+      #result {
+        padding: 2rem 1.5rem;
+      }
+
+      .social-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .social-buttons a {
+        width: 90%;
+        max-width: 250px;
+        text-align: center;
+        padding: 1rem;
+        font-size: 0.9rem;
+      }
+
+      .keyword {
+        font-size: 1.2rem;
+      }
+
+      .result-content {
+        font-size: 1rem;
+      }
+
+      .details p {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .form-container {
+        padding: 1.5rem 1rem;
+      }
+
+      #result {
+        padding: 1.5rem 1rem;
+      }
+
+      .social-buttons a {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+        width: 95%;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>💰 金運占い 💰</h1>
-  <form id="fortuneForm">
-    <label for="ageRange">年齢帯を選んでください:</label><br />
-    <select id="ageRange">
-      <option value="10">10代</option>
-      <option value="20" selected>20代</option>
-      <option value="30">30代</option>
-      <option value="40">40代</option>
-      <option value="50">50代</option>
-      <option value="60">60代以上</option>
-    </select><br />
-    <label for="yourBirthday">あなたの誕生日:</label><br />
-    <input type="date" id="yourBirthday" name="yourBirthday" required /><br /><br />
-    <button type="submit">占う</button>
-  </form>
-  <div id="result"></div>
-  <a href="index.html" class="back-button">🔙 トップに戻る</a>
+  <div class="floating-coins"></div>
+  
+  <div class="container">
+    <a href="index.html" class="back-link">🏠 トップに戻る</a>
+    
+    <h1>💰 金運占い 💰</h1>
+    
+    <div class="form-container">
+      <form id="fortuneForm">
+        <label for="ageRange">年齢帯を選んでください</label>
+        <select id="ageRange">
+          <option value="10">10代</option>
+          <option value="20" selected>20代</option>
+          <option value="30">30代</option>
+          <option value="40">40代</option>
+          <option value="50">50代</option>
+          <option value="60">60代以上</option>
+        </select>
+        
+        <label for="yourBirthday">あなたの誕生日</label>
+        <input type="date" id="yourBirthday" name="yourBirthday" required />
+        
+        <button type="submit" class="submit-btn">✨ 金運を占う ✨</button>
+      </form>
+    </div>
+    
+    <div id="result"></div>
+  </div>
 
   <script>
-    function createSparkle() {
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('sparkle');
-      sparkle.style.left = Math.random() * 100 + 'vw';
-      sparkle.style.animationDuration = 2 + Math.random() * 3 + 's';
-      document.body.appendChild(sparkle);
-      setTimeout(() => sparkle.remove(), 5000);
+    function createCoin() {
+      const coin = document.createElement('div');
+      coin.classList.add('coin');
+      coin.style.left = Math.random() * 100 + 'vw';
+      coin.style.animationDuration = (Math.random() * 4 + 6) + 's';
+      document.querySelector('.floating-coins').appendChild(coin);
+      setTimeout(() => coin.remove(), 8000);
     }
-    setInterval(createSparkle, 300);
+    setInterval(createCoin, 800);
 
     function setBirthdayByAgeRange() {
       const age = parseInt(document.getElementById('ageRange').value);
@@ -185,14 +428,16 @@
 
         const result = fortunes[Math.floor(Math.random() * fortunes.length)];
         resultDiv.innerHTML = `
-          <div class="keyword shiny">🔑 今日のキーワード：${result.keyword}</div>
-          <p>🎨 ラッキーカラー：<strong>${result.color}</strong></p>
-          <p>📌 開運アクション：<em>${result.action}</em></p>
-          <p style="margin-top: 15px; line-height: 1.6;">${result.message}</p>
+          <div class="keyword">🔑 ${result.keyword}</div>
+          <div class="result-content">${result.message}</div>
+          <div class="details">
+            <p>🎨 <strong>ラッキーカラー：</strong>${result.color}</p>
+            <p>📌 <strong>開運アクション：</strong>${result.action}</p>
+          </div>
           <div class="social-buttons">
-            <a class="line" href="https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(location.href)}" target="_blank">LINE</a>
-            <a class="x" href="https://twitter.com/intent/tweet?url=${encodeURIComponent(location.href)}" target="_blank">X</a>
-            <a class="insta" href="https://www.instagram.com/" target="_blank">Instagram</a>
+            <a class="line" href="https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(result.message)}" target="_blank">LINE でシェア</a>
+            <a class="x" href="https://twitter.com/intent/tweet?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(result.message)}" target="_blank">X でシェア</a>
+            <a class="insta" href="https://www.instagram.com/" target="_blank">Instagram でシェア</a>
           </div>
         `;
         resultDiv.classList.remove("show");

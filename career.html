@@ -3,166 +3,439 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>キャリア運占い</title>
+  <title>💼 キャリア運占い | 運勢占いアプリ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%);
+      font-family: 'Kosugi Maru', sans-serif;
+      text-align: center;
+      padding: 2rem 1rem;
       margin: 0;
-      padding: 0;
-      font-family: "Noto Sans JP", sans-serif;
-      background: #e6f1f9;
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      padding: 20px 0;
-      font-size: 28px;
-      color: #2b6ca3;
-    }
-    form {
-      background: white;
-      max-width: 320px;
-      margin: 20px auto;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    label {
-      width: 100%;
-      text-align: left;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-    select, input[type="date"] {
-      width: 85%;
-      padding: 6px 8px;
-      margin: 6px 0 12px;
-      font-size: 14px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    button {
-      display: block;
-      margin: 10px auto 0;
-      background-color: #3a84c6;
-      color: white;
-      font-size: 16px;
-      padding: 8px 24px;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-    }
-    .card {
-      background: #fff;
-      margin: 30px auto 120px;
-      padding: 25px;
-      max-width: 420px;
-      border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
-      text-align: center;
+      min-height: 100vh;
       position: relative;
+      overflow-x: hidden;
     }
-    .card p {
-      margin: 10px 0;
-      font-size: 16px;
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
     }
-    .share {
-      margin-top: 20px;
-    }
-    .share a {
-      margin: 0 12px;
+
+    .back-link {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(255,255,255,0.9);
+      padding: 0.8rem 1.2rem;
+      border-radius: 50px;
       text-decoration: none;
-      color: #3a84c6;
-      font-weight: bold;
-      font-size: 14px;
+      color: #666;
+      font-size: 0.9rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-    .back-button {
+
+    .back-link:hover {
+      background: rgba(255,255,255,1);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      color: white;
+      font-size: clamp(1.8rem, 4vw, 2.2rem);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      margin-bottom: 2rem;
+      font-weight: 400;
+      animation: careerGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes careerGlow {
+      0% { text-shadow: 0 2px 10px rgba(0,0,0,0.3), 0 0 20px rgba(79,172,254,0.3); }
+      100% { text-shadow: 0 2px 10px rgba(0,0,0,0.3), 0 0 30px rgba(79,172,254,0.6); }
+    }
+
+    .form-container {
+      background: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+      border: 1px solid rgba(79,172,254,0.3);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      margin: 2rem auto;
+      max-width: 500px;
+      box-shadow: 
+        0 15px 40px rgba(0,0,0,0.1),
+        0 6px 15px rgba(0,0,0,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+      backdrop-filter: blur(15px);
+    }
+
+    label {
+      font-size: 1rem;
+      color: #4a5568;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 0.5rem;
+      text-align: left;
+    }
+
+    input[type="date"], select {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border: 2px solid rgba(79,172,254,0.3);
+      border-radius: 15px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: rgba(255,255,255,0.8);
+      transition: all 0.3s ease;
+    }
+
+    input[type="date"]:focus, select:focus {
+      outline: none;
+      border-color: #4facfe;
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 0 0 3px rgba(79,172,254,0.1);
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      border: none;
+      padding: 1.2rem 3rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 25px rgba(79,172,254,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(79,172,254,0.5);
+    }
+
+    #result {
+      margin-top: 3rem;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 2.5rem;
+      max-width: 600px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(240,253,255,0.95) 100%);
+      border: 1px solid rgba(79,172,254,0.3);
+      border-radius: 24px;
+      box-shadow: 
+        0 15px 40px rgba(0,0,0,0.1),
+        0 6px 15px rgba(0,0,0,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(15px);
+    }
+
+    #result.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .result-icon {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      margin-bottom: 1rem;
+    }
+
+    .result-message {
+      font-size: clamp(1.2rem, 3vw, 1.4rem);
+      color: #0f4c75;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .result-details {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(79,172,254,0.1) 0%, rgba(240,253,255,0.2) 100%);
+      border-radius: 16px;
+      border-left: 4px solid #4facfe;
+    }
+
+    .result-details p {
+      margin: 0.8rem 0;
+      font-size: 0.95rem;
+      color: #495057;
+    }
+
+    .result-details strong {
+      color: #0f4c75;
+      font-weight: 600;
+    }
+
+    .share-buttons {
+      margin-top: 2rem;
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .share-buttons a {
+      padding: 0.8rem 1.2rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      white-space: nowrap;
+      min-width: 100px;
       text-align: center;
-      margin-top: 20px;
     }
-    .back-button a {
-      text-decoration: none;
-      color: #3a84c6;
-      font-weight: bold;
+
+    .share-line {
+      background: linear-gradient(135deg, #00c300, #00e600);
+      color: white;
+    }
+    
+    .share-x {
+      background: linear-gradient(135deg, #1da1f2, #0d8bd9);
+      color: white;
+    }
+    
+    .share-insta {
+      background: linear-gradient(135deg, #e1306c, #fd1d1d, #fcb045);
+      color: white;
+    }
+
+    .share-buttons a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    .floating-stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: radial-gradient(circle, #ffffff, #4facfe);
+      border-radius: 50%;
+      animation: floatStar 8s infinite linear;
+      box-shadow: 0 0 10px rgba(79,172,254,0.5);
+    }
+
+    @keyframes floatStar {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+
+      .back-link {
+        position: relative;
+        top: auto;
+        left: auto;
+        margin-bottom: 1rem;
+        display: inline-block;
+      }
+
+      .form-container {
+        padding: 2rem 1.5rem;
+        margin: 1rem auto;
+      }
+
+      #result {
+        padding: 2rem 1.5rem;
+      }
+
+      .share-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .share-buttons a {
+        width: 90%;
+        max-width: 250px;
+        text-align: center;
+        padding: 1rem;
+        font-size: 0.9rem;
+      }
+
+      .result-message {
+        font-size: 1.1rem;
+      }
+
+      .result-details p {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .form-container {
+        padding: 1.5rem 1rem;
+      }
+
+      #result {
+        padding: 1.5rem 1rem;
+      }
+
+      .share-buttons a {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+        width: 95%;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>🌟 キャリア運占い 🌟</h1>
-  <form id="fortuneForm">
-    <label for="ageGroup">年齢帯を選択:</label>
-    <select id="ageGroup">
-      <option value="20">20代</option>
-      <option value="30">30代</option>
-      <option value="40">40代</option>
-      <option value="50">50代</option>
-      <option value="60">60代以上</option>
-    </select>
-    <label for="birthday">誕生日を入力:</label>
-    <input type="date" id="birthday" required />
-    <button type="submit">占う</button>
-  </form>
-  <div id="result" class="card" style="display:none;"></div>
-  <div class="back-button">
-    <a href="index.html">← トップに戻る</a>
+  <div class="floating-stars"></div>
+  
+  <div class="container">
+    <a href="index.html" class="back-link">🏠 トップに戻る</a>
+    
+    <h1>💼 キャリア運占い 💼</h1>
+    
+    <div class="form-container">
+      <form id="fortuneForm">
+        <label for="ageGroup">年齢帯を選んでください</label>
+        <select id="ageGroup">
+          <option value="20" selected>20代</option>
+          <option value="30">30代</option>
+          <option value="40">40代</option>
+          <option value="50">50代</option>
+          <option value="60">60代以上</option>
+        </select>
+        
+        <label for="birthday">あなたの誕生日</label>
+        <input type="date" id="birthday" name="birthday" required />
+        
+        <button type="submit" class="submit-btn">✨ キャリア運を占う ✨</button>
+      </form>
+    </div>
+    
+    <div id="result" style="display:none;"></div>
   </div>
 
   <script>
-    const ageGroupSelect = document.getElementById('ageGroup');
-    const birthdayInput = document.getElementById('birthday');
-    const resultDiv = document.getElementById('result');
-    const form = document.getElementById('fortuneForm');
-    let careerFortunes = [];
+    function createStar() {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.animationDuration = (Math.random() * 4 + 6) + 's';
+      document.querySelector('.floating-stars').appendChild(star);
+      setTimeout(() => star.remove(), 8000);
+    }
+    setInterval(createStar, 800);
 
-    // 誕生日の自動セット
-    let isBirthdayManuallyChanged = false;
-    birthdayInput.addEventListener('change', () => {
-      isBirthdayManuallyChanged = true;
-    });
+    function setBirthdayByAgeRange() {
+      const age = parseInt(document.getElementById('ageGroup').value);
+      const birthdayInput = document.getElementById("birthday");
+      const today = new Date();
+      const defaultDate = new Date(today.getFullYear() - (age === 60 ? 65 : age), today.getMonth(), today.getDate());
+      const yyyy = defaultDate.getFullYear();
+      const mm = String(defaultDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(defaultDate.getDate()).padStart(2, '0');
+      birthdayInput.value = `${yyyy}-${mm}-${dd}`;
+    }
 
-    ageGroupSelect.addEventListener('change', () => {
-      if (isBirthdayManuallyChanged) return;
-      const baseYear = new Date().getFullYear();
-      const age = parseInt(ageGroupSelect.value);
-      const estimatedYear = baseYear - (age === 60 ? 65 : age);
-      const month = (new Date().getMonth() + 1).toString().padStart(2, '0');
-      const day = new Date().getDate().toString().padStart(2, '0');
-      birthdayInput.value = `${estimatedYear}-${month}-${day}`;
-    });
+    document.addEventListener("DOMContentLoaded", () => {
+      setBirthdayByAgeRange();
+      document.getElementById('ageGroup').addEventListener('change', setBirthdayByAgeRange);
 
-    // JSON読み込み
-    fetch('career.json')
-      .then(res => res.json())
-      .then(data => {
-        careerFortunes = data;
-      });
+      const form = document.getElementById("fortuneForm");
+      const resultDiv = document.getElementById("result");
+      let fortunes = [];
 
-    // 占い表示
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (careerFortunes.length === 0) {
-        resultDiv.innerHTML = "<p>占いデータの読み込み中です…</p>";
+      fetch("career.json?v=" + new Date().getTime())
+        .then(response => response.json())
+        .then(data => {
+          fortunes = data;
+        });
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (fortunes.length === 0) {
+          resultDiv.innerHTML = "<p>占いデータの読み込み中です…</p>";
+          resultDiv.style.display = 'block';
+          return;
+        }
+
+        const result = fortunes[Math.floor(Math.random() * fortunes.length)];
+        resultDiv.innerHTML = `
+          <div class="result-icon">${result.icon}</div>
+          <div class="result-message">${result.message}</div>
+          <div class="result-details">
+            <p>🔑 <strong>今日のキーワード：</strong>${result.keyword}</p>
+            <p>🎨 <strong>ラッキーカラー：</strong>${result.color}</p>
+            <p>💪 <strong>開運アクション：</strong>${result.action}</p>
+            <p>📚 <strong>おすすめの本：</strong>${result.book}</p>
+          </div>
+          <div class="share-buttons">
+            <a class="share-line" href="https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(result.message)}" target="_blank">LINE でシェア</a>
+            <a class="share-x" href="https://twitter.com/intent/tweet?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(result.message)}" target="_blank">X でシェア</a>
+            <a class="share-insta" href="https://www.instagram.com/" target="_blank">Instagram でシェア</a>
+          </div>
+        `;
+        resultDiv.classList.remove("show");
+        void resultDiv.offsetWidth;
+        resultDiv.classList.add("show");
         resultDiv.style.display = 'block';
-        return;
-      }
-
-      const f = careerFortunes[Math.floor(Math.random() * careerFortunes.length)];
-      resultDiv.innerHTML = `
-        <p>${f.icon} ${f.message}</p>
-        <p>今日のキーワード：<strong>${f.keyword}</strong></p>
-        <p>ラッキーカラー：<strong>${f.color}</strong></p>
-        <p>開運アクション：<strong>${f.action}</strong></p>
-        <p>おすすめの本：<strong>${f.book}</strong></p>
-        <div class="share">
-          <p>この結果をシェアしよう！</p>
-          <a href="https://line.me/R/msg/text/?キャリア運占いの結果：${encodeURIComponent(f.message)}" target="_blank">LINE</a>
-          <a href="https://twitter.com/intent/tweet?text=キャリア運占いの結果：${encodeURIComponent(f.message)}" target="_blank">X</a>
-          <a href="https://www.instagram.com/" target="_blank">Instagram</a>
-        </div>
-      `;
-      resultDiv.style.display = 'block';
+      });
     });
   </script>
 </body>
